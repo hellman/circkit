@@ -328,6 +328,16 @@ class Circuit(BaseCircuit):
     # --------------------------------
 
     def add_node(self, node):
+        if not isinstance(node, Node):
+            if isinstance(node, Operation):
+                raise TypeError(
+                    "Trying to add Operation as node, need to create a node from it."
+                    " Call the operation with its node arguments."
+                )
+            raise TypeError(
+                f"Trying to add {node:r} as node, but it is not a Node."
+            )
+
         if node.circuit is not self:
             raise RuntimeError(f"node's circuit {node.circuit} is not self")
 
@@ -389,6 +399,10 @@ class Circuit(BaseCircuit):
         elif isinstance(value, Node):
             raise TypeError(
                 f"Can not output the Node {value} from a different circuit"
+            )
+        elif isinstance(value, Operation):
+            raise TypeError(
+                "Can not output Operation, need to create a node. Call the operation with its node arguments."
             )
 
         try:
