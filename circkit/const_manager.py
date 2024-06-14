@@ -25,9 +25,9 @@ class ConstManager:
 
 
 def const_2_int(value):
-    if hasattr(value, "integer_representation"):
+    if hasattr(value, "to_integer"):
         # sage's GF(p**k)
-        return value.integer_representation()
+        return value.to_integer()
     # try whatever
     return int(value)
 
@@ -53,7 +53,7 @@ class ArithmeticConstManager(ConstManager):
         super().__init__(circuit)
 
         self.base_ring = circuit.base_ring
-        self.has_int_repr = hasattr(self.base_ring(0), "integer_representation")
+        self.has_int_repr = hasattr(self.base_ring(0), "to_integer")
 
     def create(self, value):
         if isinstance(value, self.circuit.Node):
@@ -61,7 +61,7 @@ class ArithmeticConstManager(ConstManager):
             return self.create(value.value)
         if isinstance(value, int) or type(value).__name__ == "Integer":
             if self.has_int_repr:
-                return self.base_ring.fetch_int(value)
+                return self.base_ring.from_integer(value)
             return self.base_ring(value)
         elif hasattr(value, "parent") and value.parent().order() == self.base_ring.order():
             return value

@@ -29,11 +29,11 @@ def test_toycircuit():
     out = C.evaluate(inp)
 
     def stdresults(a, b):
-        a = K.fetch_int(a)
-        b = K.fetch_int(b)
+        a = K.from_integer(a)
+        b = K.from_integer(b)
 
-        c5 = K.fetch_int(5)
-        c3 = K.fetch_int(3)
+        c5 = K.from_integer(5)
+        c3 = K.from_integer(3)
 
         x0 = a + b
         x1 = x0 - c5
@@ -41,5 +41,5 @@ def test_toycircuit():
         x3 = x2 / c3
         x4 = x3 ** 4
         x5 = ~x4
-        return [x4.integer_representation(), x5.integer_representation()]
+        return [x4.to_integer(), x5.to_integer()]
     assert out == stdresults(*inp)
