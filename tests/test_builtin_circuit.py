@@ -1,6 +1,12 @@
-from circkit.arithmetic import ArithmeticCircuit
-from sage.all import GF
 import random
+import pytest
+
+sage_all = pytest.importorskip("sage.all")
+if sage_all:
+    GF = sage_all.GF
+
+from circkit.arithmetic import ArithmeticCircuit
+
 K = GF(2**8)
 
 
