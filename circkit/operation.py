@@ -203,6 +203,7 @@ class Operation(metaclass=OperationMeta):
 
     PRECOMPUTABLE: bool
         Whether the operation is precomputable (given the inputs and the parameters).
+        Equivalent to whether the operation is deterministic.
 
     STR_LIMIT: int = 30
         Maximum length of the string describing parameters to keep (for
@@ -311,7 +312,7 @@ class Operation(metaclass=OperationMeta):
                     )
                     return self._circuit.add_const(value)
 
-        if self._circuit.CACHE_NODES:
+        if self._circuit.CACHE_NODES and self.PRECOMPUTABLE:
             node_cache_key = tuple(node.id for node in incoming)
             if self.SYMMETRIC:
                 node_cache_key = tuple(sorted(node_cache_key))
@@ -328,7 +329,7 @@ class Operation(metaclass=OperationMeta):
 
         self.after_create_node(node)
 
-        if self._circuit.CACHE_NODES:
+        if self._circuit.CACHE_NODES and self.PRECOMPUTABLE:
             self._circuit._nodes_cache[cache_key] = node
 
         return node
